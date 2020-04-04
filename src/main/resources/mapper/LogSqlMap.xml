@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.dao.LogSqlMap">
+	<insert id="addLog"   parameterType="com.great.entity.SystemLog">
+		insert into systemlog (operationUser,operationType,operationName,operationdate,operationresult,operationIp)
+		VALUES(#{operationUser},#{operationType},#{operationName},#{operationdate},#{operationresult},#{operationIp})
+	</insert>
+
+
+
+
+</mapper>

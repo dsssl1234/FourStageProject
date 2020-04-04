@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../../../layui/css/layui.css"/>
+    <script type="text/javascript" src="../../../layui/layui.js"></script>
+    <style>
+        .layui-main-login {
+            /*margin-top: 15%;*/
+            /*margin-left: 35%;*/
+            /*padding: 2% 0;*/
+            /*width: 30%;*/
+            /*background-color: #dadada;*/
+            padding: 2%;
+            width:30%;
+            /*height:280px;*/
+            background-color: #dadada;
+            float: right;
+            margin:150px 200px 0 0 ;
+        }
+        body{
+            background-image:url("../images/a.jpg");
+        }
+        #p21{
+        }
+    </style>
+</head>
+<body>
+<div class="layui-main-login">
+    <form class="layui-form" action="" onsubmit="return false;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">输入框</label>
+            <div class="layui-input-block" style="width: 190px">
+                <input type="text" name="id" required  lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码框</label>
+            <div class="layui-input-inline">
+                <input type="password" name="pwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">辅助文字</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">验证码</label>
+            <div class="layui-input-block" style="width: 190px">
+                <input type="text" name="id" required  lay-verify="required" placeholder="不区分大小写" autocomplete="off" class="layui-input">
+            </div>
+<!--            <img   src="${pageContext.request.contextPath}/VerifyCodeServlet" onclick="refreshCode()">-->
+<!--            <a style=" font-size:12px;color: red" onclick="refreshCode()">看不清?点图片刷新</a>-->
+        </div>
+        <div class="layui-form-item">
+
+            <img  style="padding-left: 110px;" src="${pageContext.request.contextPath}/VerifyCodeServlet" onclick="refreshCode()">
+            <a style=" font-size:12px;color: red" onclick="refreshCode()" >看不清?点图片刷新</a>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+        <div id="p21">
+            <a id="p5"href="${pageContext.request.contextPath}/front/jsp/Register.jsp" style="color: red">立即注册新账户</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

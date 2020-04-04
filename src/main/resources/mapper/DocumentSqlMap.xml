@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.dao.DocumentSqlMap">
+        <insert id="insertInfByUid"  parameterType="com.great.entity.Document" >
+			insert into document (title,intro,typename,downscore,uptime,dstate,downcount,userid,url)
+		VALUES(#{title},#{intro},#{typename},#{downscore},#{uptime},#{dstate},#{downcount},#{userid},#{url})
+	</insert>
+
+    <resultMap id="Document" type="com.great.entity.Document">
+        <result column="did" property="did"></result>
+        <result column="title" property="title"></result>
+        <result column="uptime" property="uptime"></result>
+        <result column="downscore" property="downscore"></result>
+        <result column="downcount" property="downcount"></result>
+        <result column="typename" property="typename"></result>
+        <result column="name" property="name"></result>
+        <result column="userid" property="userid"></result>
+        <result column="dstate" property="dstate"></result>
+    </resultMap>
+
+    <!--查询档案记录并分页    -->
+    <select id="findDocumentByUid" resultMap="Document" parameterType="java.util.Map">
+		select d1.did,d1.title,d1.uptime,d1.dstate,d1.downscore,d1.downcount,d1.typename,d2.userid,d2.name from document d1 left join user d2 on  d1.userid = d2.userid
+		<where>
+            <if test="title !='' and title!=null">
+                and d1.title like concat('%',#{title},'%')
+            </if>
+            <if test="who !='' and who!=null">
+                and d2.name like concat('%',#{who},'%')
+            </if>
+            <if test="type !='' and type!=null">
+                and d1.typename = #{type}
+            </if>
+            <if test="rtime1 != '' and rtime1 != null">
+                and d1.uptime &gt;= #{rtime1}
+            </if>
+            <if test="rtime2 != '' and rtime2 != null">
+                and d1.uptime &lt;= #{rtime2}
+            </if>
+        </where>
+        limit #{minLimit},#{maxLimit}
+	</select>
+
+    <!--查找用户信息总数-->
+    <select id="findDocumentCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+--         select count(*) from document
+        select count(*) from document t1,user t2
+        <where>
+            t1.userid=t2.userid
+            <if test="title !='' and title!=null">
+                and t1.title like concat('%',#{title},'%')
+            </if>
+            <if test="who !='' and who!=null">
+                and t2.name like concat('%',#{who},'%')
+            </if>
+            <if test="type !='' and type!=null">
+                and t1.typename = #{type}
+            </if>
+            <if test="rtime1 != '' and rtime1 != null">
+                and t1.uptime &gt;= #{rtime1}
+            </if>
+            <if test="rtime2 != '' and rtime2 != null">
+                and t1.uptime &lt;= #{rtime2}
+            </if>
+
+        </where>
+
+    </select>
+
+    <!--查询当前用户档案记录并分页    -->
+    <select id="findDocumentRecord" resultMap="Document" parameterType="java.util.Map">
+        select d1.did,d1.title,d1.uptime,d1.downscore,d1.downcount,d1.typename,d1.dstate,d2.name from document d1 left join user d2 on  d1.userid = d2.userid
+        <where>
+            d1.userid = #{userid}
+            <if test="dstate !='' and dstate!=null">
+                and d1.dstate = #{dstate}
+            </if>
+            <if test="type !='' and type!=null">
+                and d1.typename = #{type}
+            </if>
+            <if test="rtime1 != '' and rtime1 != null">
+                and d1.uptime &gt;= #{rtime1}
+            </if>
+            <if test="rtime2 != '' and rtime2 != null">
+                and d1.uptime &lt;= #{rtime2}
+            </if>
+        </where>
+        limit #{minLimit},#{maxLimit}
+    </select>
+
+    <!--查找当前用户信息总数-->
+    <select id="findDocumentRecordCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from document
+        <where>
+            userid = #{userid}
+            <if test="dstate !='' and dstate!=null ">
+                and dstate = #{dstate}
+            </if>
+            <if test="type !='' and type!=null">
+                and typename = #{type}
+            </if>
+            <if test="rtime1 != '' and rtime1 != null">
+                and uptime &gt;= #{rtime1}
+            </if>
+            <if test="rtime2 != '' and rtime2 != null">
+                and uptime &lt;= #{rtime2}
+            </if>
+        </where>
+
+    </select>
+
+
+    <!--删除当前用户上传的记录-->
+    <delete id="deleteDocumentInf"  parameterType="java.lang.Integer">
+        delete  from document where did =#{did}
+    </delete>
+
+    <!--更新文档状态-->
+    <update id="changeDocumentState" parameterType="java.util.Map" >
+        update document  set dstate = #{dstate} where did =#{did}
+
+    </update>
+
+
+    <select id="findDocument" parameterType="java.lang.Integer" resultType="com.great.entity.Document">
+    select * from document where did =#{did}
+    </select>
+
+    <update id="newDownCount" parameterType="java.util.Map">
+        update document set downcount = #{downcount} where did = #{did}
+    </update>
+
+</mapper>

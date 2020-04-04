@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--加载外部配置,用来连接数据库 -->
+<!--    <properties resource="jdbc.properties"></properties>-->
+    <!--给某个对象取别名，在这边设置之后，在sqlMap.xml那边结果集就只需要写表名     -->
+    <typeAliases>
+        <!--这是给entity包下所有类取别名，在用完全限定命名的情况下可以通过类名直接调用 -->
+        <package name="com.great.entity" />
+    </typeAliases>
+<!--    <environments default="dev">-->
+<!--        <environment id="dev">-->
+<!--            &lt;!&ndash;  事务管理jdbc(事务管理等),另外的有MANAGED,是一种容器管理          &ndash;&gt;-->
+<!--            <transactionManager type="jdbc"></transactionManager>-->
+<!--            &lt;!&ndash;   pooled表示使用连接池的意思,还有另外两种是  unpooled、JNDI,都是用容器来管理的       &ndash;&gt;-->
+<!--            <dataSource type="pooled">-->
+<!--            &lt;!&ndash; 以下是数据库配合文件里的属性&ndash;&gt;-->
+<!--                <property name="driver" value="${driver}" />-->
+<!--                <property name="url" value="${url}" />-->
+<!--                <property name="username" value="${username}" />-->
+<!--                <property name="password" value="${password}" />-->
+<!--            </dataSource>-->
+<!--        </environment>-->
+<!--    </environments>-->
+<!--    <mappers> &lt;!&ndash;每个表对应的map地址,这个配置文件也相对应对所有表的地址进行统一管理 &ndash;&gt;-->
+<!--        <mapper resource="mapper/DeptSqlMap.xml"/>-->
+<!--        <mapper resource="mapper/MenuSqlMap.xml"/>-->
+<!--        <mapper resource="mapper/TreeSqlMap.xml"/>-->
+<!--        <mapper resource="mapper/RoleSqlMap.xml"/>-->
+<!--        <mapper resource="mapper/LogSqlMap.xml"/>-->
+<!--    </mappers>-->
+</configuration>

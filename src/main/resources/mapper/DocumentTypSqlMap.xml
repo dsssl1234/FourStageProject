@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.dao.DocumentTypeSqlMap">
+
+    <select id="findDocumentType" resultType="DocumentType" >
+		select * from documenttype
+	</select>
+
+
+	<resultMap id="MyScore" type="com.great.entity.MyScore">
+		<result column="sid" property="sid"></result>
+		<result column="time" property="time"></result>
+		<result column="event" property="event"></result>
+		<result column="score" property="score"></result>
+		<result column="name" property="name"></result>
+	</resultMap>
+	<select id="findMyScore" resultMap="MyScore"  parameterType="java.util.Map" >
+		select t1.sid,t1.time,t1.event,t1.score,t2.name from myscore t1 left join user t2 on t1.userid = t2.userid
+		where t1.userid = #{userid} limit #{minLimit},#{maxLimit}
+
+	</select>
+
+	<select id="findMyScoreCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		select count(*) from myscore where userid = #{userid}
+	</select>
+
+	<select id="findTypeCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from documenttype
+		<where>
+			<if test="typename !='' and typename!=null">
+				and typename = #{typename}
+			</if>
+		</where>
+	</select>
+
+	<select id="findType" resultType="DocumentType" parameterType="java.util.Map" >
+		select * from documenttype
+		<where>
+			<if test="typename !='' and typename!=null">
+				and typename like concat('%',#{typename},'%')
+			</if>
+		</where>
+		limit #{minLimit},#{maxLimit}
+	</select>
+
+	<!--删除文档格式-->
+	<delete id="deleteType"  parameterType="java.lang.Integer">
+        delete  from documenttype where typeid =#{typeid}
+    </delete>
+
+	<!--更新文档格式信息-->
+	<update id="updateType" parameterType="com.great.entity.DocumentType"  >
+		update documenttype  set typename = #{typename},bounty = #{bounty} where typeid =#{typeid}
+	</update>
+
+	<!--添加文档格式信息-->
+	<insert id="addType" parameterType="com.great.entity.DocumentType"  >
+		insert  into documenttype  (typename,bounty) VALUES (#{typename},#{bounty})
+	</insert>
+
+
+	<!--更新用户积分-->
+	<update id="changeUserScore" parameterType="java.util.Map" >
+        update user  set score = #{score} where userid =#{userid}
+    </update>
+
+	<!--查询用户当前积分    -->
+	<select id="findUserScore" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select score from user where userid = #{userid}
+    </select>
+
+	<!--根据档案类型查询对应的奖励分    -->
+	<select id="typeScore" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select bounty from documenttype where typename = #{typename}
+    </select>
+
+	<!--设置用户的积分记录-->
+	<insert id="insertScoreRecord"  parameterType="com.great.entity.MyScore">
+        insert into myscore (time,event,score,userid) values (#{time},#{event},#{score},#{userid});
+    </insert>
+
+</mapper>

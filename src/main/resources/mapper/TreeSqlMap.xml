@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.dao.TreeSqlMap">
+    <!--查找所有的父级菜单,不区分角色    -->
+    <select id="allMenuByRid" resultMap="TreeMap1" >
+       select * from menu m where m.mid in (select r.mid from relation r,menu m )
+                       and m.parentid =0;
+    </select>
+    <!--根据角色id到关系表中查找所有的菜单id-->
+    <select id="allMidByRid" resultMap="TreeMap2" parameterType="java.lang.Integer">
+
+       select r.mid from relation r ,menu m where r.roleid =#{roleid} and m.parentid !=0 and r.mid = m.mid;
+    </select>
+    <!--根据角色id以及菜单和角色的关系表中，查询到对应的父id -->
+<!--    <select id="fatherMenuByRid" resultMap="TreeMap" parameterType="java.lang.Integer">-->
+<!--        select * from menu m where m.mid in (select r.mid from relation r,menu m where r.roleid = #{roleid})-->
+<!--                       and m.parentid =0;-->
+<!--    </select>-->
+    <!--根据父id查找到对应的子id -->
+    <select id="childrenMenuByPid" resultMap="Tree1" parameterType="java.lang.Integer">
+		select * from menu m where  m.parentid = #{mid};
+    </select>
+    <!--重新封装结果-->
+<!--    <resultMap  type="com.great.entity.Tree" id="TreeMap">-->
+<!--        <result column="menuname" property="title"></result>-->
+<!--        <result column="mid" property="id"></result>-->
+<!--        <collection property="children"  select="childrenMenuByPid" column="mid" ofType="Tree" javaType="list">-->
+<!--            <result column="menuname" property="title"/>-->
+<!--            <result column="mid" property="id"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+    <!--查找所有的父级菜单,不区分角色的结果集,查询的属性要和数据库表字段关联上,不然对应不上会变成null-->
+    <resultMap  type="com.great.entity.Tree" id="TreeMap1">
+        <result column="menuname" property="title"></result>
+        <result column="mid" property="id"></result>
+    <!-- 当查询到tree表中的List<Tree>children时,执行一对多,通过关联指定执行相对应的sql       -->
+        <collection property="children"  select="childrenMenuByPid" column="mid" ofType="Tree" javaType="list">
+            <result column="menuname" property="title"/>
+            <result column="mid" property="id"/>
+        </collection>
+    </resultMap>
+    <!--根据角色id到关系表中查找所有的菜单id的结果集,查询的属性要和数据库表字段关联上,不然对应不上会变成null-->
+    <resultMap  type="com.great.entity.Tree" id="TreeMap2">
+        <result column="mid" property="id"></result>
+    </resultMap>
+    <!--根据父id查找到对应的子id的结果集,相当于说给children的结果集在进行封装,和数据库表的字段在关联，才不会nul-->
+    <resultMap  type="com.great.entity.Tree" id="Tree1">
+        <result column="menuname" property="title"></result>
+        <result column="mid" property="id"></result>
+    </resultMap>
+
+
+</mapper>
